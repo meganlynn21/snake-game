@@ -1,7 +1,7 @@
 
 .board {
   outline: 2px solid rgb(134, 154, 189);
-  background: #ffffff;
+  background: rgb(153, 204, 255)
 }
 
 .row {
@@ -11,7 +11,6 @@
 .cell {
   width: 35px;
   height: 35px;
-  outline: 1px solid rgb(134, 154, 189);
   display: inline-block;
 }
 
