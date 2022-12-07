@@ -19,7 +19,7 @@ export function StartMenu() {
             navigate('board');
             play();
           }}
-          class="massive ui inverted green button">
+          className="massive ui inverted green button">
           START
         </button>
       </div>

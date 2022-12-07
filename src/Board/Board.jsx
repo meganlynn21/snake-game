@@ -1,19 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState } from 'react';
 import {
   randomIntFromInterval,
   reverseLinkedList,
   useInterval,
 } from '../lib/utils.js';
-
+import useSound from 'use-sound';
 import './Board.css';
-
-
-/**
- * TODO: add a more elegant UX for before a game starts and after a game ends.
- * A game probably shouldn't start until the user presses start, and
- * once a game is over, the board state should likely freeze until the user
- * intentionally restarts the game. Create game over screen
- */
+import {useNavigate} from 'react-router-dom';
+import gameOver from '../audio/gameOver.mp3';
+import success from '../audio/success.mp3'
 
 class LinkedListNode {
   constructor(value) {
@@ -54,6 +49,9 @@ const getStartingSnakeLLValue = board => {
 };
 
 const Board = () => {
+  const navigation = useNavigate();
+  const [play] = useSound(gameOver);
+  const [play2] = useSound(success);
   const [score, setScore] = useState(0);
   const [board, setBoard] = useState(createBoard(BOARD_SIZE));
   const [snake, setSnake] = useState(
@@ -73,14 +71,13 @@ const Board = () => {
     window.addEventListener('keydown', e => {
       handleKeydown(e);
     });
-  }, []);
+  }, );
 
   // `useInterval` is needed; you can't naively do `setInterval` in the
-  // `useEffect` above. See the article linked above the `useInterval`
-  // definition for details.
+  // `useEffect` above.
   useInterval(() => {
     moveSnake();
-  }, 150);
+  }, 200);
 
   const handleKeydown = e => {
     const newDirection = getDirectionFromKey(e.key);
@@ -104,12 +101,16 @@ const Board = () => {
 
     const nextHeadCoords = getCoordsInDirection(currentHeadCoords, direction);
     if (isOutOfBounds(nextHeadCoords, board)) {
-      handleGameOver();
+      resetGame();
+      play()
+      HandleGameOver();
       return;
     }
     const nextHeadCell = board[nextHeadCoords.row][nextHeadCoords.col];
     if (snakeCells.has(nextHeadCell)) {
-      handleGameOver();
+      resetGame();
+      play()
+      HandleGameOver();
       return;
     }
 
@@ -192,10 +193,22 @@ const Board = () => {
 
     setFoodCell(nextFoodCell);
     setFoodShouldReverseDirection(nextFoodShouldReverseDirection);
-    setScore(score + 1);
+    if(score >= 9) {
+      play2()
+      winGame()
+    }
+    else{
+      setScore(score + 1);
+    }
+
   };
 
-  const handleGameOver = () => {
+  const HandleGameOver = () => {
+    return navigation('gameover');
+  }
+  
+  const resetGame = () => {
+    play()
     setScore(0);
     const snakeLLStartingValue = getStartingSnakeLLValue(board);
     setSnake(new LinkedList(snakeLLStartingValue));
@@ -203,6 +216,10 @@ const Board = () => {
     setSnakeCells(new Set([snakeLLStartingValue.cell]));
     setDirection(Direction.RIGHT);
   };
+
+  const winGame = () => {
+      return navigation('win')
+  }
 
   return (
     <>
@@ -343,4 +360,6 @@ const getCellClassName = (
   return className;
 };
 
+
 export default Board;
+
