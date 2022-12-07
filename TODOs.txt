@@ -14,4 +14,4 @@ Snake Game TODOs
 - [x] Handle food consumption
 - [x] Handle death
 - [x] Handle score
-- [ ] Handle game start and game reset <-------- TODO!
+- [x] Handle game start and game reset 
