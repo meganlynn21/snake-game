@@ -5,6 +5,8 @@ I made this snake game using React. I implemented Linked Lists and Reversed Link
 Get to 10 points to win, if you hit the wall or end up hitting your own tail then it is game over.
 
 
+**Note: You can only play it on a PC
+
 **You can play it live here in netlify at this link:** https://cool-cajeta-5a23c8.netlify.app/
 
 
